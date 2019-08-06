@@ -1,0 +1,7 @@
+2019-03-02T09:40:05.963575Z 0 [Warning] [MY-010915] [Server] 'NO_ZERO_DATE', 'NO_ZERO_IN_DATE' and 'ERROR_FOR_DIVISION_BY_ZERO' sql modes should be used with strict mode. They will be merged with strict mode in a future release.
+2019-03-02T09:40:05.965639Z 0 [System] [MY-010116] [Server] C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe (mysqld 8.0.15) starting as process 7308
+2019-03-02T09:40:13.824447Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2019-03-02T09:40:14.013463Z 0 [System] [MY-010931] [Server] C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe: ready for connections. Version: '8.0.15'  socket: ''  port: 3306  MySQL Community Server - GPL.
+2019-03-02T09:40:14.232126Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2019-03-02T09:40:14.232126Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2019-03-02T09:40:14.232126Z 0 [Warning] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
