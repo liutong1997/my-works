@@ -27,7 +27,7 @@ for table in tables:
            c='序号'
            table.cell(0,2).paragraphs[0].clear()
            table.cell(0,2).paragraphs[0].add_run(c)
-           
-print(name)
+
+# print(name)
 
 file.save(r'/home/liutong/桌面/my works/files_to_deal/3.docx' )

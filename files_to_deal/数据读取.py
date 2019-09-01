@@ -3,7 +3,7 @@ import docx
 from xlsxwriter import *
 
 
-workbook=Workbook('out1.xlsx')
+workbook=Workbook(r'/home/liutong/桌面/my works/files_to_deal/out.xlsx' )
 worksheet = workbook.add_worksheet()#创建输出表格文件
 
 
@@ -12,6 +12,7 @@ def value_clear(dict2={'1':'a',"2":'s'}):
     for i in key:
         dict2[i]=None
     return dict2
+
 #定义清空字典值而不改变键的函数
 
 def strs_are_nums(a='22.22'):
