@@ -1,30 +1,46 @@
-import numpy as np
-import matplotlib.pyplot as plt
-# This import registers the 3D projection, but is otherwise unused.
-from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+# import pandas as pd
+# import numpy as np
+#
+# # s = pd.Series([1, 3, 6, np.nan, 44, 1])
+# # dates = pd.date_range('20160101', periods=6)
+# # df = pd.DataFrame(np.random.randn(6, 4), index=dates, columns=['a', 'b', 'c', 'd'])
+#
+# df2 = pd.DataFrame({'A': 1.,
+#                     'B': pd.Timestamp('20130102'),
+#                     'C': pd.Series(1, index=[range(4)], dtype='float32').values,
+#                     'D': np.array([3] * 4, dtype='int32'),
+#                     'E': pd.Categorical(["test", "train", "test", "train"]),
+#                     'F': 'foo'}, index=list('abcd'))
+#
+# # print(pd.Series(1, index=list(range(4)), dtype='float32'))
+# print(df2)
 
 
-# setup the figure and axes
-fig = plt.figure(figsize=(6, 6))
-ax1 = fig.add_subplot(111, projection='3d')
+# coding=utf-8
+import os
+from multiprocessing import Process
 
 
-# fake data
-_x = np.arange(2)
-_y = np.arange(3)
-_xx, _yy = np.meshgrid(_x, _y)
-print(_xx)
-x, y = _xx.ravel(), _yy.ravel()
-
-top = np.array([1,2,3,4,5,6])
-print(x)
-print(y)
-print(top)
-bottom = np.zeros_like(top)
-width = depth = 1
-
-ax1.bar3d(x, y, bottom, width, depth, top, shade=True)
-ax1.set_title('Shaded')
+def hello(name):
+    # os.getpid() 用来获取当前进程 ID
+    print('child process: {}'.format(os.getpid()))
+    print('Hello ' + name)
 
 
-plt.show()
+def main():
+    # 打印当前进程即主进程 ID
+    print('parent process: {}'.format(os.getpid()))
+    # Process 对象只是一个子任务，运行该任务时系统会自动创建一个子进程
+    # 注意 args 参数要以 tuple 方式传入
+    p = Process(target=hello, args=('shallot',))
+    print('child process start')
+    # 启动一个子进程来运行子任务，该进程运行的是 hello() 函数中的代码
+    p.start()
+    p.join()
+    # 子进程完成后，继续运行主进程
+    print('child process stop')
+    print('parent process: {}'.format(os.getpid()))
+
+
+if __name__ == '__main__':
+    main()
