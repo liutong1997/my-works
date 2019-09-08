@@ -35,4 +35,4 @@ if __name__ == '__main__':
     file = docx.Document(input('请输入要读取的正确的docx文件路径:'))
     # 调用清洗函数
     deal_alltable(file)
-    # file.save(input('请输入要写入的正确的docx文件路径，如果与读取路径重名将覆盖源文件，请慎重:'))
+    file.save(input('请输入要写入的正确的docx文件路径，如果与读取路径重名将覆盖源文件，请慎重:'))

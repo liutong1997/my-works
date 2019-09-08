@@ -3,7 +3,7 @@ import docx
 from multiprocessing import Process
 
 
-def deal_alltable(t):
+def clear_all_user_information(t):
     # 判断是否为含有编号的单元格，含有即为用户信息表
     if t.cell(0, 0).text == '编号':
         # 创建变量m收集行数，每张表进行一次初始化
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         # 将每一张表传递给参数t
         t = tables[i]
         # Process 对象只是一个子任务，运行该任务时系统会自动创建一个子进程
-        p = Process(target=deal_alltable(t))
+        p = Process(target=clear_all_user_information(t))
         # 启动一个子进程来运行子任务
         p.start()
         p.join()

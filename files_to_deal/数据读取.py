@@ -29,75 +29,89 @@ def strs_are_nums(a='22.22'):
         return False
 
 
-file = docx.Document(input('请输入要读取的正确的docx文件路径:'))
+if __name__ == '__main__':
 
-# 创建字典储存标题值
-dict0 = {'序号': None, '年龄': None, '性别': None, '编号': None, '内外向(E)': None \
-    , '神经质(N)': None, '精神质(P)': None, '掩饰性(L)': None, \
-         '躯体化': None, '强迫症状': None, '人际关系敏感': None, '抑郁': None, '焦虑': None, '敌对': None, '恐怖': None, \
-         '偏执': None, '精神病性': None, '其他': None, '总分': None, '总均分': None, '阳性项目数': None}
+    file = docx.Document(input('请输入要读取的正确的docx文件路径:'))
 
-number = {}
-# 分别为用户数量，写入文件行数，列数
-k = 0;
-a = 0;
-b = 0
+    # 创建字典储存标题值
+    dict0 = {'序号': None, '年龄': None, '性别': None, '编号': None, '内外向(E)': None \
+        , '神经质(N)': None, '精神质(P)': None, '掩饰性(L)': None, \
+             '躯体化': None, '强迫症状': None, '人际关系敏感': None, '抑郁': None, '焦虑': None, '敌对': None, '恐怖': None, \
+             '偏执': None, '精神病性': None, '其他': None, '总分': None, '总均分': None, '阳性项目数': None}
 
-# 写入标题行
-for key in dict0.keys():
-    worksheet.write(a, b, key)
-    b += 1
-a += 1
-
-tables = file.tables
-for table in tables:
+    number = {}
+    # k,a,b分别为用户数量，写入文件行数，列数
+    k = 0;
+    a = 0;
     b = 0
 
-    # 判断用户
-    if table.cell(0, 1).text not in number and strs_are_nums(table.cell(0, 1).text):
+    # 写入标题行
+    for key in dict0.keys():
+        worksheet.write(a, b, key)
+        b += 1
+    a += 1
 
-        # 写入上一个用户信息
-        if k > 1:
-            for value in dict0.values():
-                worksheet.write(a, b, value)
-                b += 1
-            a += 1
+    tables = file.tables
+    for table in tables:
+        b = 0
+        # 判断用户
+        if table.cell(0, 1).text not in number and strs_are_nums(table.cell(0, 1).text):
+            # 写入上一个用户信息
+            if k > 1:
+                print(dict0)
+                for value in dict0.values():
+                    worksheet.write(a, b, value)
+                    b += 1
+                a += 1
+            # 利用字典储存用户编号，并且统计用户数量
 
-        # 利用字典储存用户编号，并且统计用户数量
-        value_clear(dict0)
-        number[table.cell(0, 1).text] = k
-        k += 1
-
-        # 判断键是否存在在字典中，再写入对应的值
-        for m in range(len(table.rows)):
-            for n in range(len(table.rows[0].cells)):
-                if table.cell(m, n).text in dict0:
-
-                    # 写入值
-                    if table.cell(m, n + 1).text in ['男', '女'] or strs_are_nums(table.cell(m, n + 1).text):
-                        dict0[table.cell(m, n).text] = table.cell(m, n + 1).text
-
-                    # 利用try模块防止列表越界的情况，即n已经代表最后一列时，n+2是不存在的
-                    try:
-                        if strs_are_nums(table.cell(m, n + 2).text):
-                            dict0[table.cell(m, n).text] = table.cell(m, n + 2).text
-                    # 直接跳过越界
-                    except:
-                        pass
-    else:
-        for m in range(len(table.rows)):
-            for n in range(len(table.rows[0].cells)):
-                if table.cell(m, n).text in dict0:
-                    if table.cell(m, n + 1).text in ['男', '女'] or strs_are_nums(table.cell(m, n + 1).text):
-                        dict0[table.cell(m, n).text] = table.cell(m, n + 1).text
-                    try:
-                        if strs_are_nums(table.cell(m, n + 2).text):
-                            dict0[table.cell(m, n).text] = table.cell(m, n + 2).text
-                    except:
-                        pass
-
-for value in dict0.values():
-    worksheet.write(a, b, value)
-    b += 1
-a += 1
-workbook.close()
+            value_clear(dict0)
+            number[table.cell(0, 1).text] = k
+            k += 1
+            # 遍历行
+            for m in range(len(table.rows)):
+                # 遍历列
+                for n in range(len(table.rows[0].cells)):
+                    # 判断是否为属性值
+                    if table.cell(m, n).text in dict0:
+                        if table.cell(m, n).text == '年龄':
+                            print(table.cell(m, n+1).text)
+                            dict0[table.cell(m, n).text] = table.cell(m, n + 1).text
+                        # 如果符合性别值或者数字组成的字符串，则将值写入字典
+                        if table.cell(m, n+1).text in ['男', '女'] or strs_are_nums(table.cell(m, n + 1).text):
+                            dict0[table.cell(m, n).text] = table.cell(m, n + 1).text
+                        # 利用try模块防止列表越界的情况，即n已经代表最后一列时，n+
+                        try:
+                            # 判断人格因子的参数，因为其原始分在第二列
+                            if strs_are_nums(table.cell(m, n + 2).text):
+                                dict0[table.cell(m, n).text] = table.cell(m, n + 2).text
+                        # 直接跳过越界
+                        except:
+                            pass
+        else:
+            # 遍历行
+            for m in range(len(table.rows)):
+                # 遍历列
+                for n in range(len(table.rows[0].cells)):
+                    # 判断是否为属性值
+                    if table.cell(m, n).text in dict0:
+                        if table.cell(m, n).text == '年龄':
+                            print(table.cell(m,n+1).text)
+                            dict0[table.cell(m, n).text] = table.cell(m, n + 1).text
+                        # 如果符合性别值或者数字组成的字符串，则将值写入字典
+                        if table.cell(m, n + 1).text in ['男', '女'] or strs_are_nums(table.cell(m, n + 1).text):
+                            dict0[table.cell(m, n).text] = table.cell(m, n + 1).text
+                        # 利用try模块防止列表越界的情况，即n已经代表最后一列时，n+2是不存在的
+                        try:
+                            # 判断人格因子的参数，因为其原始分在第二列
+                            if strs_are_nums(table.cell(m, n + 2).text):
+                                dict0[table.cell(m, n).text] = table.cell(m, n + 2).text
+                        # 直接跳过越界
+                        except:
+                            pass
+    print(dict0)
+    for value in dict0.values():
+        worksheet.write(a, b, value)
+        b += 1
+    a += 1
+    workbook.close()
