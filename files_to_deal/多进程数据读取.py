@@ -1,6 +1,7 @@
 # coding=utf-8
 import docx
 from xlsxwriter import *
+from multiprocessing import Process
 
 
 def collect_information(t):
@@ -9,13 +10,14 @@ def collect_information(t):
         # 判断序号是否与已经读取的用户长度一致
         if int(t.cell(0, 3).text) == len(list0):
             # 变量a储存序号
+            global a
             a = int(t.cell(0, 3).text)
             # 列表list0储存每个用户的信息字典
             list0.append(dict0.copy())
         # 遍历首个单元格为编号的表的首行数值
         for n in range(1, len(t.rows[0].cells), 2):
             # 将列表中字典的对应值改为读取到的数值
-            list0[a][t.cell(0, n - 1).text] = t.cell(0, n).text
+            list0[int(t.cell(0, 3).text)][t.cell(0, n - 1).text] = t.cell(0, n).text
     # 读取首个单元格是因子名称的表
     if t.cell(0, 0).text == '因子名称' and t.cell(1, 0).text in ['内外向(E)', '躯体化']:
         # 遍历该表所有行
@@ -28,7 +30,7 @@ def wt_xlsx():
     # 创建／添加excel工作簿
     work_book = Workbook(input('请输入正确的输出表格文件路径(没有自动创建)，保存格式建议为较稳定的xlsx：'))
     # 创建输出表格文件
-    worksheet = workbook.add_worksheet()
+    worksheet = work_book.add_worksheet()
     # 创建a、b变量存放行列值
     a = 0;
     b = 0
@@ -64,15 +66,19 @@ if __name__ == '__main__':
     # 读取所有表格
     tables = file.tables
     # 创建字典储存标题值
-    dict0 = {'序号': None, '年龄': None, '性别': None, '编号': None, '内外向(E)': None
+    dict0 = {'序号': None, '年龄': None, '性别': None, '编号': None, '内外向(E)': None\
         , '神经质(N)': None, '精神质(P)': None, '掩饰性(L)': None, \
              '躯体化': None, '强迫症状': None, '人际关系敏感': None, '抑郁': None, '焦虑': None, '敌对': None, '恐怖': None, \
              '偏执': None, '精神病性': None, '其他': None, '总分': None, '总均分': None, '阳性项目数': None}
     # 创建列表list0储存
     list0 = [dict0]
     # 遍历所有表格
-    for table in tables:
+    for n in range(len(tables)):
         # 调用收集用户信息的函数
-        collect_information(table)
+        p = Process(collect_information(tables[n]))
+        # 启动一个子进程来运行子任务
+        p.start()
+        p.join()
+        # 子进程完成后，继续运行主进程
     # 调用函数写入xlsx文件
     wt_xlsx()
