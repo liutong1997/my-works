@@ -45,6 +45,8 @@ if __name__ == '__main__':
     c = '序号'
     a = 1
     file_path = os.getcwd()  # 获取当前py文件的路径
+    local_path = file_path + '/tihuanmingzi'
+    make_folder(local_path)
     # 遍历当前路径的所有.doc文件
     for file_name in glob.glob(os.path.join(file_path, '*.docx')):
         file = docx.Document(file_name)
@@ -67,4 +69,4 @@ if __name__ == '__main__':
                     p.join()
                     # 子进程完成后，继续运行主进程,保存文件
         new_name = file_name.strip(file_path)
-        file.save('new' + new_name)
+        file.save(local_path + new_name)
