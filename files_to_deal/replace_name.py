@@ -68,5 +68,9 @@ if __name__ == '__main__':
                     p.start()
                     p.join()
                     # 子进程完成后，继续运行主进程,保存文件
-        new_name = file_name.strip(file_path)
-        file.save(local_path + new_name)
+        if local_path[0] == '/':
+            new_name = file_name.strip(file_path)
+            file.save(local_path + '/' + new_name)
+        else:
+            new_name = file_name.split('\\')[-1]
+            file.save(local_path + '\\' + new_name)
